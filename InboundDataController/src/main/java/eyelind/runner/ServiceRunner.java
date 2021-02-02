@@ -7,32 +7,33 @@ public class ServiceRunner {
 	
 	public static void main(String[] args) {
 
-		Runtime.getRuntime().addShutdownHook(new NewInboundFileThread());
+		NewInboundFileThread newThread = new NewInboundFileThread();
+		Runtime.getRuntime().addShutdownHook(newThread);
 		boolean running = true;
 		
 		while (running) {
 			
+			setShutdownHook(newThread.getShutdownHook());
+			
 			try {
 				
-				setShutdownHook(true);
+				System.out.println("Running...");
 			} catch (Exception e) {
-				setShutdownHook(false);
 			}
 			
 			running = getShutdownHook();
 			if (!running) {
-				System.out.println("Shutdown hook true, terminating program safely...");
+				System.out.println("Shutdown hook found, terminating programmain thread...");
 				System.exit(1);
 			}
 		}
-		
 	}
 
 	private static boolean getShutdownHook() {
 		return running;
 	}
 	
-	private static void setShutdownHook(boolean isRunning) {
+	public static void setShutdownHook(boolean isRunning) {
 		running = isRunning;
 	}
 
